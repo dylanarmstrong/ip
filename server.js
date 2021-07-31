@@ -75,6 +75,7 @@ app.use('*', (req, res, next) => {
     return;
   }
 
+  log(req, 'Invalid Request');
   res.sendStatus(403);
 });
 
