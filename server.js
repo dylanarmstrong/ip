@@ -88,7 +88,11 @@ app.get('/ip/get-all', (req, res) => {
 
 app.get('/ip/get', (req, res) => {
   log(req, '/get');
-  const { ip } = get_latest.get();
+  const latest = get_latest.get();
+  let ip = null;
+  if (latest) {
+    ({ ip } = latest);
+  }
   res.setHeader('content-type', 'text/plain');
   res.send(ip);
 });

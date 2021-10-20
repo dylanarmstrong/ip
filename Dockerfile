@@ -5,7 +5,6 @@ LABEL maintainer="Dylan Armstrong <dylan@dylan.is>"
 WORKDIR /app
 
 COPY config.json ./
-COPY ip.db ./
 COPY package-lock.json ./
 COPY package.json ./
 COPY server.js ./
