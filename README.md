@@ -3,6 +3,13 @@
 In case I lost my IP address while remote, this will cause a dedicated server to
 update an external server that I can access.
 
+#### Docker
+
+```
+docker build -t dylanarms/ip .
+docker run -d -p <host port>:80 --name photos dylanarms/ip
+```
+
 #### Server Setup
 
 ```

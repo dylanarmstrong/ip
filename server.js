@@ -4,7 +4,7 @@ const { pass, user } = require('./config.json');
 
 const app = express();
 
-const port = 9006;
+const port = 80;
 const day = 86400000;
 
 const start = db.prepare(`
