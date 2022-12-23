@@ -1,6 +1,11 @@
-const express = require('express');
 const db = require('better-sqlite3')('./ip.db');
-const { pass, user } = require('./config.json');
+const express = require('express');
+const fs = require('fs');
+const jwt = require('jsonwebtoken');
+
+const { pass } = require('./config.json');
+
+const public = fs.readFileSync('./public.pem');
 
 const app = express();
 
@@ -48,15 +53,19 @@ const getIp = (req) => {
   }
 };
 
-// Check that valid user / pass is present in headers
+// Check that valid pass is present in headers
 const isValidRequest = (req) => {
   const {
-    pass: headerPass,
-    user: headerUser,
+    authorization,
   } = req.headers;
 
-  if (headerPass && headerUser && headerPass === pass && headerUser === user) {
-    return true;
+  if (authorization && authorization.startsWith('Bearer ')) {
+    try {
+      const sig = jwt.verify(authorization.slice('Bearer '.length), public);
+      return sig.pass === pass;
+    } catch (e) {
+      log(req, `Invalid Request: ${e.message}`);
+    }
   }
   return false;
 };

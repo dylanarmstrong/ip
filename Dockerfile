@@ -1,27 +1,15 @@
-FROM node:14-alpine
+FROM node:16-alpine
 
 LABEL maintainer="Dylan Armstrong <dylan@dylan.is>"
 
 WORKDIR /app
 
-COPY config.json ./
-COPY package-lock.json ./
-COPY package.json ./
-COPY server.js ./
+COPY package.json package-lock.json ./
 
-RUN \
-  apk add --no-cache --update --virtual \
-    .gyp \
-    g++ \
-    make \
-    python3 \
-  && \
-  npm i -g npm \
-  && \
-  npm install \
-  && \
-  apk del \
-    .gyp
+RUN npm i -g npm
+RUN npm ci
+
+COPY config.json public.pem server.js ./
 
 EXPOSE 80/tcp
 
