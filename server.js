@@ -78,6 +78,31 @@ const log = (req, msg) => {
   console.log(`[${getDate()}] [${getIp(req)}] ${msg}`);
 };
 
+const clean = (
+  req = {
+    connection: {
+      remoteAddress: 'scheduled',
+    },
+    headers: {},
+  },
+  res = {
+    sendStatus: (_) => null,
+  },
+) => {
+  log(req, '/clean');
+  try {
+    delete_old.run();
+    res.sendStatus(200);
+    return;
+  } catch (e) {
+  }
+  res.sendStatus(400);
+};
+
+setInterval(clean, day);
+
+clean();
+
 app.use('*', (req, res, next) => {
   if (isValidRequest(req)) {
     next();
@@ -118,28 +143,12 @@ app.post('/ip/set', (req, res) => {
   res.sendStatus(400);
 });
 
-const clean = (
-  req = {
-    connection: {
-      remoteAddress: 'scheduled',
-    },
-    headers: {},
-  },
-  res = {
-    sendStatus: (_) => null,
-  },
-) => {
-  log(req, '/clean');
-  try {
-    delete_old.run();
-    res.sendStatus(200);
-    return;
-  } catch (e) {
-  }
-  res.sendStatus(400);
-};
-setInterval(clean, day);
-clean();
 app.post('/ip/clean', clean);
+
+// Default to 403
+app.use('*', (req, res) => {
+  log(req, 'Invalid Request');
+  res.sendStatus(403);
+});
 
 app.listen(port, () => console.log(`Listening at ${port}`));
