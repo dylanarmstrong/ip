@@ -46,7 +46,7 @@ const delete_old = db.prepare(`
 
 const getIp = (req) => {
   try {
-    return String(req.headers['x-forwarded-for'] || req.connection.remoteAddress)
+    return String(req.headers['cf-connecting-ip'] || req.connection.remoteAddress)
       .split(',')[0];
   } catch (e) {
     return 'Error';
