@@ -1,4 +1,6 @@
 config.json
+ip-docker.tar
+lib
 ip.db
 node_modules
 private.pem

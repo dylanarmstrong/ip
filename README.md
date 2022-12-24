@@ -5,7 +5,10 @@ update an external server that I can access.
 
 #### Docker
 
+Please note, the Dockerfile requires the application to be pre-built.
+
 ```
+npm run build
 docker build -t dylanarms/ip .
 docker run -d -p <host port>:80 --name ip dylanarms/ip
 ```
@@ -17,12 +20,10 @@ docker run -d -p <host port>:80 --name ip dylanarms/ip
 openssl genrsa -out private.pem 4096
 openssl rsa -in private.pem -pubout -out public.pem
 
-# Edit config.json
-cp config.example.json config.json
-vim config.json
-
+# Manual
 npm ci
-node server.js
+npm run build
+node lib/server.js
 ```
 
 Once it's running, setup a reverse proxy to port 80.
@@ -30,12 +31,11 @@ Once it's running, setup a reverse proxy to port 80.
 #### Client Setup
 
 ```
-# Edit config.json
-cp config.example.json config.json
-vim config.json
-
 # Get latest IP
 curl -H "Authorization: $(node /path/to/get-token.js)" https://example.com/ip/get
+
+# Set latest IP
+curl -X POST -H "Authorization: $(node /path/to/get-token.js)" https://example.com/ip/set
 
 # Add cron to automatically run this
 crontab -e

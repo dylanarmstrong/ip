@@ -1,11 +1,22 @@
-const db = require('better-sqlite3')('./ip.db');
-const express = require('express');
-const fs = require('fs');
-const jwt = require('jsonwebtoken');
+import express from 'express';
+import fs from 'fs';
+import jwt from 'jsonwebtoken';
+import sql from 'better-sqlite3';
 
-const public = fs.readFileSync('./public.pem');
+type FakeRequest = {
+  connection: {
+    remoteAddress: string;
+  };
+  headers: {
+    'cf-connecting-ip'?: string;
+  };
+};
+
+const db = sql('./ip.db');
+const publicKey = fs.readFileSync('./public.pem');
 
 const app = express();
+app.disable('x-powered-by');
 
 const port = 80;
 const day = 86400000;
@@ -40,7 +51,7 @@ const delete_old = db.prepare(`
   where t < date('now', '-1 days')
 `);
 
-const getIp = (req) => {
+const getIp = (req: express.Request | FakeRequest) => {
   try {
     return String(req.headers['cf-connecting-ip'] || req.connection.remoteAddress)
       .split(',')[0];
@@ -50,17 +61,17 @@ const getIp = (req) => {
 };
 
 // Check that valid pass is present in headers
-const isValidRequest = (req) => {
+const isValidRequest = (req: express.Request) => {
   const {
     authorization,
   } = req.headers;
 
   if (authorization && authorization.startsWith('Bearer ')) {
     try {
-      jwt.verify(authorization.slice('Bearer '.length), public);
+      jwt.verify(authorization.slice('Bearer '.length), publicKey);
       return true;
     } catch (e) {
-      log(req, `Invalid Request: ${e.message}`);
+      log(req, `Invalid Request: ${(e as Error)?.message}`);
     }
   }
   return false;
@@ -70,29 +81,31 @@ const getDate = () => (new Date())
   .toLocaleString()
   .replace(',', '');
 
-const log = (req, msg) => {
+const log = (req: express.Request | FakeRequest, msg: string) => {
   console.log(`[${getDate()}] [${getIp(req)}] ${msg}`);
 };
 
 const clean = (
-  req = {
-    connection: {
-      remoteAddress: 'scheduled',
-    },
-    headers: {},
-  },
-  res = {
-    sendStatus: (_) => null,
-  },
+  req?: express.Request | FakeRequest,
+  res?: express.Response,
 ) => {
-  log(req, '/clean');
+  log(
+    req ||
+    {
+      connection: {
+        remoteAddress: 'scheduled',
+      },
+      headers: {},
+    },
+    '/clean'
+  );
   try {
     delete_old.run();
-    res.sendStatus(200);
+    res?.sendStatus(200);
     return;
   } catch (e) {
   }
-  res.sendStatus(400);
+  res?.sendStatus(400);
 };
 
 setInterval(clean, day);
