@@ -3,8 +3,6 @@ const express = require('express');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 
-const { pass } = require('./config.json');
-
 const public = fs.readFileSync('./public.pem');
 
 const app = express();
@@ -12,7 +10,7 @@ const app = express();
 const port = 80;
 const day = 86400000;
 
-const start = db.prepare(`
+db.prepare(`
   create table if not exists ip (
     id integer primary key,
     ip text not null
@@ -21,9 +19,7 @@ const start = db.prepare(`
     ),
     t timestamp default current_timestamp
   )
-`);
-
-start.run();
+`).run();
 
 const insert = db.prepare(`
   insert into ip (
@@ -61,8 +57,8 @@ const isValidRequest = (req) => {
 
   if (authorization && authorization.startsWith('Bearer ')) {
     try {
-      const sig = jwt.verify(authorization.slice('Bearer '.length), public);
-      return sig.pass === pass;
+      jwt.verify(authorization.slice('Bearer '.length), public);
+      return true;
     } catch (e) {
       log(req, `Invalid Request: ${e.message}`);
     }

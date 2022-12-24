@@ -9,7 +9,7 @@ COPY package.json package-lock.json ./
 RUN npm i -g npm
 RUN npm ci
 
-COPY config.json public.pem server.js ./
+COPY public.pem server.js ./
 
 EXPOSE 80/tcp
 
