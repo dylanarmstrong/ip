@@ -5,7 +5,7 @@ const getRequestIp = (req: Request) => {
     return String(
       req.headers['cf-connecting-ip'] || req.socket.remoteAddress,
     ).split(',')[0];
-  } catch (e) {
+  } catch {
     return 'Error';
   }
 };

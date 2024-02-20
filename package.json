@@ -2,6 +2,7 @@
   "dependencies": {
     "express": "^4.18.2",
     "express-serve-static-core": "^0.1.1",
+    "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "sqlite3": "^5.1.7"
   },
@@ -24,11 +25,14 @@
   "eslintConfig": {
     "extends": "@dylanarmstrong"
   },
+  "license": "ISC",
   "main": "./lib/server.js",
+  "name": "@dylanarmstrong/ip",
   "prettier": {
     "singleQuote": true,
     "trailingComma": "all"
   },
+  "private": true,
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
