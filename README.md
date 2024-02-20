@@ -3,43 +3,42 @@
 In case I lose my IP address while remote, this will cause a dedicated server to
 update an external server that I can access.
 
-#### Docker
-
-Please note, the Dockerfile requires the application to be pre-built.
-
-```
-npm run build
-docker build -t dylanarms/ip .
-docker run -d -p <host port>:80 --name ip dylanarms/ip
-```
-
 #### Server Setup
 
-```
+```bash
 # Setup key for JWT
 openssl genrsa -out private.pem 4096
 openssl rsa -in private.pem -pubout -out public.pem
+docker-compose up --build
+```
 
-# Manual
-npm ci
-npm run build
-node lib/server.js
+#### Development (Docker)
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+```
+
+#### Development (Manual)
+
+```bash
+pnpm install
+pnpm run dev
 ```
 
 Once it's running, setup a reverse proxy to port 80.
 
 #### Client Setup
 
-```
+```bash
 # Get latest IP
-curl -H "Authorization: $(node /path/to/get-token.js)" https://example.com/ip/get
+curl -H "Authorization: $(node `readlink -f ./scripts/get-token.js`)" https://example.com/ip/get
 
 # Set latest IP
-curl -X POST -H "Authorization: $(node /path/to/get-token.js)" https://example.com/ip/set
+curl -X POST -H "Authorization: $(node `readlink -f ./scripts/get-token.js`)" https://example.com/ip/set
 
 # Add cron to automatically run this
 crontab -e
 
 # Add this line
-*/30 * * * * curl -X POST -H "Authorization: $(node /path/to/get-token.js)" https://example.com/ip/set
+*/30 * * * * curl -X POST -H "Authorization: $(node `readlink -f ./scripts/get-token.js`)" https://example.com/ip/set
 ```

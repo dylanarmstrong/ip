@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  ip:
+    build:
+      args:
+        build: true
+      context: .
+      dockerfile: Dockerfile
+    container_name: ip
+    environment:
+      NODE_ENV: production
+    image: dylanarms/ip
+    ports:
+      - 80:80/tcp
+    restart: unless-stopped
