@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
-import type { RequestHandler } from 'express';
 import { readFileSync } from 'node:fs';
+
+import type { RequestHandler } from 'express';
 
 import { log } from '../utils.js';
 

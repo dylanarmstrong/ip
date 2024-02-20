@@ -106,4 +106,13 @@ const deleteOld = async (): Promise<void> =>
     });
   });
 
-export { deleteOld, getIp, getIps, insertIp };
+const clean = async (): Promise<number> => {
+  try {
+    await deleteOld();
+    return 200;
+  } catch {
+    return 400;
+  }
+};
+
+export { clean, getIp, getIps, insertIp };

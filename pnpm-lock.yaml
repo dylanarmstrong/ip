@@ -8,6 +8,9 @@ dependencies:
   express:
     specifier: ^4.18.2
     version: 4.18.2
+  express-serve-static-core:
+    specifier: ^0.1.1
+    version: 0.1.1
   jsonwebtoken:
     specifier: ^9.0.2
     version: 9.0.2
@@ -25,6 +28,9 @@ devDependencies:
   '@types/express':
     specifier: ^4.17.21
     version: 4.17.21
+  '@types/express-serve-static-core':
+    specifier: ^4.17.43
+    version: 4.17.43
   '@types/jsonwebtoken':
     specifier: ^9.0.5
     version: 9.0.5
@@ -1054,6 +1060,10 @@ packages:
   /expand-template@2.0.3:
     resolution: {integrity: sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==}
     engines: {node: '>=6'}
+    dev: false
+
+  /express-serve-static-core@0.1.1:
+    resolution: {integrity: sha512-phQFPo1vVwBLOjDq+EspUY6PpWZIs/s62Lvu6QuReViQ9j9ANBnMqPBRwdxs3zxNmpMJ9KBKrmMqCjMwHnGRyQ==}
     dev: false
 
   /express@4.18.2:
