@@ -22,16 +22,20 @@ await new Promise<void>((resolve) =>
     .run(resolve),
 );
 
+let isDeleteOldReady = false;
+let isGetLatestReady = false;
+let isInsertReady = false;
+
 const stmtDeleteOld = db.prepare(`
   delete from ip
   where t < date('now', '-1 days')
-`);
+`, () => isDeleteOldReady = true);
 
 const stmtGetLatest = db.prepare(`
   select ip from ip
   order by t desc
   limit 50
-`);
+`, () => isGetLatestReady = true);
 
 const stmtInsert = db.prepare(`
   insert into ip (
@@ -39,10 +43,13 @@ const stmtInsert = db.prepare(`
   ) values (
     ?
   )
-`);
+`, () => isInsertReady = true);
 
 const getIp = async (): Promise<string> =>
   new Promise((resolve, reject) => {
+    if (!isGetLatestReady) {
+      reject(new Error('get not ready'));
+    }
     stmtGetLatest.get<GetLatest>((err, row) => {
       stmtGetLatest.reset((resetErr) => {
         if (err) {
@@ -63,6 +70,9 @@ const getIp = async (): Promise<string> =>
 
 const getIps = async (): Promise<string[]> =>
   new Promise((resolve, reject) => {
+    if (!isGetLatestReady) {
+      reject(new Error('get not ready'));
+    }
     stmtGetLatest.all<GetLatest>((err, rows) => {
       stmtGetLatest.reset((resetErr) => {
         if (err) {
@@ -78,6 +88,9 @@ const getIps = async (): Promise<string[]> =>
 
 const insertIp = async (ip: string): Promise<void> =>
   new Promise<void>((resolve, reject) => {
+    if (!isInsertReady) {
+      reject(new Error('insert not ready'));
+    }
     stmtInsert.run(ip, (err) => {
       stmtInsert.reset((resetErr) => {
         if (err) {
@@ -93,6 +106,9 @@ const insertIp = async (ip: string): Promise<void> =>
 
 const deleteOld = async (): Promise<void> =>
   new Promise<void>((resolve, reject) => {
+    if (!isDeleteOldReady) {
+      reject(new Error('delete not ready'));
+    }
     stmtDeleteOld.run((err) => {
       stmtDeleteOld.reset((resetErr) => {
         if (err) {
