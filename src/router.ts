@@ -39,7 +39,7 @@ router.post('/set', (req, res) => {
   }
 });
 
-router.post('/ip/clean', (_, res) => {
+router.post('/clean', (_, res) => {
   const status = deleteOld();
   res.sendStatus(status);
 });
