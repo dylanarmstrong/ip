@@ -1,7 +1,9 @@
 config.json
 ip-docker.tar
-lib
 ip.db
+ip.db-shm
+ip.db-wal
+lib
 node_modules
 private.pem
 public.pem

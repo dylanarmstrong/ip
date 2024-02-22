@@ -1,14 +1,15 @@
 {
   "dependencies": {
+    "better-sqlite3": "^9.4.1",
     "express": "^4.18.2",
     "express-serve-static-core": "^0.1.1",
     "helmet": "^7.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "sqlite3": "^5.1.7"
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
     "@dylanarmstrong/eslint-config": "^0.5.4",
     "@dylanarmstrong/tsconfig": "^0.0.2",
+    "@types/better-sqlite3": "^7.6.9",
     "@types/express": "^4.17.21",
     "@types/express-serve-static-core": "^4.17.43",
     "@types/jsonwebtoken": "^9.0.5",

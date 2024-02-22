@@ -1,3 +1,5 @@
-type GetLatest = { ip: string };
+type GetLatest = {
+  ip: string;
+};
 
 export type { GetLatest };

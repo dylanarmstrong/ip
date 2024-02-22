@@ -1,14 +1,14 @@
 import { Router } from 'express';
 
-import { clean, getIp, getIps, insertIp } from './db.js';
+import { deleteOld, getIp, getIps, insertIp } from './db.js';
 import { getRequestIp, log } from './utils.js';
 
 // eslint-disable-next-line new-cap
 const router = Router();
 
-router.get('/get-all', async (req, res) => {
+router.get('/get-all', (req, res) => {
   try {
-    const ips = await getIps();
+    const ips = getIps();
     res.setHeader('content-type', 'application/json');
     res.send(ips);
   } catch (e) {
@@ -17,9 +17,9 @@ router.get('/get-all', async (req, res) => {
   }
 });
 
-router.get('/get', async (req, res) => {
+router.get('/get', (req, res) => {
   try {
-    const ip = await getIp();
+    const ip = getIp();
     res.setHeader('content-type', 'text/plain');
     res.send(ip);
   } catch (e) {
@@ -28,10 +28,10 @@ router.get('/get', async (req, res) => {
   }
 });
 
-router.post('/set', async (req, res) => {
+router.post('/set', (req, res) => {
   const ip = getRequestIp(req);
   try {
-    await insertIp(ip);
+    insertIp(ip);
     res.sendStatus(200);
   } catch (e) {
     log(req, (e as Error)?.message || 'Unable to /set');
@@ -39,8 +39,8 @@ router.post('/set', async (req, res) => {
   }
 });
 
-router.post('/ip/clean', async (_, res) => {
-  const status = await clean();
+router.post('/ip/clean', (_, res) => {
+  const status = deleteOld();
   res.sendStatus(status);
 });
 

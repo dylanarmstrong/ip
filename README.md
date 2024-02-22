@@ -31,14 +31,14 @@ Once it's running, setup a reverse proxy to port 80.
 
 ```bash
 # Get latest IP
-curl -H "Authorization: $(node `readlink -f ./scripts/get-token.js`)" https://example.com/ip/get
+curl -H "Authorization: $(/path/to/node `readlink -f ./scripts/get-token.js`)" https://example.com/ip/get
 
 # Set latest IP
-curl -X POST -H "Authorization: $(node `readlink -f ./scripts/get-token.js`)" https://example.com/ip/set
+curl -X POST -H "Authorization: $(/path/to/node `readlink -f ./scripts/get-token.js`)" https://example.com/ip/set
 
 # Add cron to automatically run this
 crontab -e
 
 # Add this line
-*/30 * * * * curl -X POST -H "Authorization: $(node `readlink -f ./scripts/get-token.js`)" https://example.com/ip/set
+*/30 * * * * curl -X POST -H "Authorization: $(/path/to/node /path/to/scripts/get-token.js)" https://example.com/ip/set
 ```
