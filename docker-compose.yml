@@ -4,8 +4,6 @@ services:
     build:
       args:
         build: true
-      context: .
-      dockerfile: Dockerfile
     container_name: ip
     environment:
       NODE_ENV: production

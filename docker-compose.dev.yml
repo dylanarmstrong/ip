@@ -4,8 +4,6 @@ services:
     build:
       args:
         build: false
-      context: .
-      dockerfile: Dockerfile
     environment:
       NODE_ENV: development
     volumes:
